@@ -20,6 +20,7 @@ class GlideAdapter : ImageAdapter {
 
         Glide
             .with(target.context)
+            .asBitmap()
             .load(loadUrl)
             .apply(options)
             .override(target.width, target.height)
