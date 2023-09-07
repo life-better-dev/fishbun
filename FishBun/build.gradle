@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'com.hiya.jacoco-android'
 apply plugin: 'de.mobilej.unmock'
+apply plugin: 'maven-publish'
 
 jacoco {
     toolVersion = "0.8.7"
@@ -10,6 +11,7 @@ jacoco {
 buildscript {
     repositories {
         mavenCentral()
+        mavenLocal()
         maven {
             url "https://plugins.gradle.org/m2/"
         }
@@ -31,6 +33,7 @@ android {
         minSdkVersion gradle.minSdk
         targetSdkVersion gradle.targetSdk
         consumerProguardFile('proguard-rules.pro')
+        consumerProguardFile('consumer-rules.pro')
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -57,7 +60,7 @@ android {
 
 apply plugin: "io.github.sabujak-sabujak"
 
-apply from: '../publish/release.gradle'
+//apply from: '../publish/release.gradle'
 
 unMock {
     keep "android.net.Uri"
@@ -90,5 +93,32 @@ configurations.all{
                 details.useVersion "0.8.7"
             }
         }
+    }
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'com.github.life-better-dev'
+            artifactId = 'fishbun'
+            version = "1.0"
+            pom {
+                description = 'Fishbun folk library for Better service'
+            }
+        }
+    }
+    repositories {
+        mavenLocal()
     }
 }
